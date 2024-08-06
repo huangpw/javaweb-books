@@ -1,7 +1,10 @@
 package com.huangpw.sys.servlet;
 
+import com.huangpw.sys.bean.SysMenu;
 import com.huangpw.sys.bean.SysUser;
+import com.huangpw.sys.service.IMenuService;
 import com.huangpw.sys.service.IUserService;
+import com.huangpw.sys.service.impl.MenuServiceImpl;
 import com.huangpw.sys.service.impl.UserServiceImpl;
 import com.huangpw.sys.utils.Constant;
 
@@ -12,11 +15,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(name = "loginServlet", urlPatterns = {"/sys/loginServlet"})
 public class LoginServlet extends HttpServlet {
 
     private final IUserService userService = new UserServiceImpl();
+
+    private final IMenuService menuService = new MenuServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -39,6 +45,12 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = req.getSession();
             user.setPassword(null);
             session.setAttribute(Constant.LOGIN_USER, user);
+            Integer roleId = user.getRoleId();
+            if(roleId != null) {
+                List<SysMenu> menus = menuService.findMenuByRoleId(roleId);
+                session.setAttribute(Constant.LOGIN_MENUS, menus);
+            }
+
             resp.sendRedirect("/main.jsp");
         }
     }

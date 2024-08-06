@@ -67,4 +67,9 @@ public class MenuServiceImpl implements IMenuService {
     public boolean haveSubMenu(int id) {
         return menuDao.haveSubMenu(id);
     }
+
+    @Override
+    public List<SysMenu> findMenuByRoleId(Integer roleId) {
+        return menuDao.findMenuByRoleId(roleId);
+    }
 }

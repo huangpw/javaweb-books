@@ -242,4 +242,36 @@ public class MenuDaoImpl implements IMenuDao {
         }
         return false;
     }
+
+    @Override
+    public List<SysMenu> findMenuByRoleId(Integer roleId) {
+        QueryRunner queryRunner = MyDbUtils.getQueryRunner();
+        String sql = "select * from sys_menu where id in ( select menu_id from sys_role_menu where role_id = ? ) order by seq";
+        try {
+            List<SysMenu> list = queryRunner.query(sql, new ResultSetHandler<List<SysMenu>>() {
+                @Override
+                public List<SysMenu> handle(ResultSet resultSet) throws SQLException {
+                    // 存储返回结果的容器
+                    List<SysMenu> list = new ArrayList<>();
+                    while (resultSet.next()) {
+                        // 每次循环一次 role 存储一条数据
+                        SysMenu menu = new SysMenu();
+                        menu.setId(resultSet.getInt("id"));
+                        menu.setName(resultSet.getString("name"));
+                        menu.setUrl(resultSet.getString("url"));
+                        menu.setParentId(resultSet.getInt("parent_id"));
+                        menu.setSeq(resultSet.getInt("seq"));
+                        menu.setCreateTime(resultSet.getDate("create_time"));
+                        list.add(menu); // 把查询的记录封装到了集合容器中
+                    }
+                    return list; // 返回查询的结果
+                }
+            }, roleId);
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }

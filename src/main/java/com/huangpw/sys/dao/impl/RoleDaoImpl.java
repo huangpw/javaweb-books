@@ -19,10 +19,13 @@ public class RoleDaoImpl implements IRoleDao {
     @Override
     public List<SysRole> list(SysRole role) {
         QueryRunner queryRunner = MyDbUtils.getQueryRunner();
-        String sql = "select * from sys_role";
+        String sql = "select * from sys_role where 1 = 1 ";
+        if(role != null){
+            if(!StringUtils.isEmpty(role.getName())) {
+                sql += " and name = '" + role.getName() + "'";
+            }
+        }
         try {
-            // BeanListHandler 会自动的帮助我们完成字段和属性的映射。前提是属性和字段完全一直
-            // 此处不会通过驼峰命名法 转换
             List<SysRole> list = queryRunner.query(sql, new ResultSetHandler<List<SysRole>>() {
                 @Override
                 public List<SysRole> handle(ResultSet resultSet) throws SQLException {

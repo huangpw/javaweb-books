@@ -35,6 +35,8 @@ public class UploadServlet extends HttpServlet {
         // 这个路径相对当前应用的目录
         // String uploadPath = getServletContext().getRealPath("/") + File.separator + Constant.UPLOAD_DIRECTORY + File.separator; // 设置文件保存目录
         String uploadPath = Constant.UPLOAD_DIRECTORY + File.separator; // 设置文件保存目录
+        // String uploadPath = getServletContext().getRealPath("") + File.separator + "upload" + File.separator;
+
                 // 检查shopFile文件夹是否存在，不存在则创建
         File uploadDir = new File(uploadPath);
         if(!uploadDir.exists()) {

@@ -105,7 +105,7 @@
                                     <td>${entity.username}</td>
                                     <td>${entity.nickname}</td>
                                     <td>
-                                        <img src="/sys/download?fileName=${entity.img}" width="60px" height="60px">
+                                        <img src="/sys/downloadServlet?fileName=${entity.img}" width="60px" height="60px">
                                     </td>
                                     <td>${entity.rolename}</td>
                                     <td>${entity.createTime}</td>

@@ -58,4 +58,6 @@ public interface IMenuDao {
     public boolean isDispatcher(int id);
 
     public boolean haveSubMenu(int id);
+
+    public List<SysMenu> findMenuByRoleId(Integer roleId);
 }

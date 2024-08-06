@@ -13,13 +13,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
 
-@WebServlet(name = "downloadServet", urlPatterns = {"/sys/download"})
+@WebServlet(name = "downloadServet", urlPatterns = {"/sys/downloadServlet"})
 public class DownloadServet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // 下载文件目录
         // String basePath = getServletContext().getRealPath("/") + File.separator + Constant.UPLOAD_DIRECTORY + File.separator;
         String basePath = Constant.UPLOAD_DIRECTORY + File.separator;
+        // String basePath = getServletContext().getRealPath("") + File.separator + "upload" + File.separator;
+
         // 获取需要下载的文件的名称
         String fileName = req.getParameter("fileName");
         FileInputStream in = new FileInputStream(basePath + fileName);

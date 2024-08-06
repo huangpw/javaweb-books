@@ -18,4 +18,12 @@ public class Constant {
     public static final String LIST_PAGE_UTILS = "pageUtils";
 
     public static final String LOGIN_USER = "loginUser";
+
+    public static final String LOGIN_MENUS = "loginMenus";
+
+    public static final String DEPARTS = "departs";
+
+    public  static final String CLASSESLIST = "classesList";
+
+    public static final String ROLE_STUDENT = "学生";
 }

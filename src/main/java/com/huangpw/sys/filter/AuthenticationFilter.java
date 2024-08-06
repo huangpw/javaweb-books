@@ -52,7 +52,7 @@ public class AuthenticationFilter implements Filter {
     
     private boolean checkAccssible(String requestURI){
         List<String > urls =
-                Arrays.asList("login.jsp","loginServlet",".css","/js/",".png",".jpg", ".gif");
+                Arrays.asList("login.jsp","loginServlet",".css","/js/",".png",".jpg", ".gif", "/img/");
         for (String url : urls) {
             if(requestURI.contains(url)){
                 return true;

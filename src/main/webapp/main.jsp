@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -38,45 +39,96 @@
             <ul class="nav" id="side-menu">
                 <li class="nav-header">
                     <div class="dropdown profile-element">
-                        <span><img alt="image" class="img-circle" src="img/profile_small.jpg" /></span>
+                        <c:if test="${ not empty sessionScope.loginUser.img}">
+                            <span><img alt="image" class="img-circle" src="/sys/downloadServlet?fileName=${sessionScope.loginUser.img}" width="64" height="64" /></span>
+                        </c:if>
+                        <c:if test="${ empty sessionScope.loginUser.img}">
+                            <span><img alt="image" class="img-circle" src="img/profile_small.jpg" /></span>
+                        </c:if>
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-									<span class="clear">
-										<span class="block m-t-xs"><strong class="font-bold">Beaut-zihan</strong></span>
-										<span class="text-muted text-xs block">超级管理员<b class="caret"></b></span>
-									</span>
+                            <span class="clear">
+                                <span class="block m-t-xs">
+                                    <strong class="font- bold">${sessionScope.loginUser.username}</strong>
+                                </span>
+                                <span class="text-muted text-xs block">${sessionScope.loginUser.nickname}
+                                    <b class="caret"></b>
+                                </span>
+                            </span>
                         </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
                             <li><a class="J_menuItem" href="form_avatar.html">修改头像</a></li>
                             <li><a class="J_menuItem" href="profile.html">个人资料</a></li>
-                            <li><a class="J_menuItem" href="contacts.html">联系我们</a></li>
-                            <li><a class="J_menuItem" href="mailbox.html">信箱</a></li>
+                            <li><a class="J_menuItem" href="contacts.html">修改密码</a></li>
                             <li class="divider"></li>
                             <li><a href="/sys/logoutServlet">安全退出</a></li>
                         </ul>
                     </div>
                     <div class="logo-element">H+</div>
                 </li>
-                <li>
-                    <a href="#">
-                        <i class="fa fa-home"></i>
-                        <span class="nav-label">基础数据</span>
-                        <span class="fa arrow"></span>
-                    </a>
-                    <ul class="nav nav-second-level">
+                <c:forEach items="${sessionScope.loginMenus}" var="parent">
+                    <c:if test="${ parent.parentId == -1 }">
                         <li>
-                            <a class="J_menuItem" href="home.jsp" data-index="0">首页</a>
+                            <a href="#">
+                                <i class="fa fa-home"></i>
+                                <span class="nav-label">${parent.name}</span>
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level">
+                                <c:forEach items="${sessionScope.loginMenus}" var="child">
+                                    <c:if test="${child.parentId == parent.id}">
+                                        <li>
+                                            <a class="J_menuItem" href="${child.url}" data-index="0">${child.name}</a>
+                                        </li>
+                                    </c:if>
+                                </c:forEach>
+                            </ul>
                         </li>
-                        <li>
-                            <a class="J_menuItem" href="/sys/userServlet?action=list">用户管理</a>
-                        </li>
-                        <li>
-                            <a class="J_menuItem" href="/sys/roleServlet?action=list">角色管理</a>
-                        </li>
-                        <li>
-                            <a class="J_menuItem" href="/sys/menuServlet?action=list">菜单管理</a>
-                        </li>
-                    </ul>
-                </li>
+                    </c:if>
+                </c:forEach>
+
+<%--                <li>--%>
+<%--                    <a href="#">--%>
+<%--                        <i class="fa fa-home"></i>--%>
+<%--                        <span class="nav-label">基础数据</span>--%>
+<%--                        <span class="fa arrow"></span>--%>
+<%--                    </a>--%>
+<%--                    <ul class="nav nav-second-level">--%>
+<%--                        <li>--%>
+<%--                            <a class="J_menuItem" href="home.jsp" data-index="0">首页</a>--%>
+<%--                        </li>--%>
+<%--                        <li>--%>
+<%--                            <a class="J_menuItem" href="/sys/userServlet?action=list">用户管理</a>--%>
+<%--                        </li>--%>
+<%--                        <li>--%>
+<%--                            <a class="J_menuItem" href="/sys/roleServlet?action=list">角色管理</a>--%>
+<%--                        </li>--%>
+<%--                        <li>--%>
+<%--                            <a class="J_menuItem" href="/sys/menuServlet?action=list">菜单管理</a>--%>
+<%--                        </li>--%>
+<%--                    </ul>--%>
+<%--                </li>--%>
+
+<%--                <li>--%>
+<%--                    <a href="#">--%>
+<%--                        <i class="fa fa-home"></i>--%>
+<%--                        <span class="nav-label">基础数据</span>--%>
+<%--                        <span class="fa arrow"></span>--%>
+<%--                    </a>--%>
+<%--                    <ul class="nav nav-second-level">--%>
+<%--                        <li>--%>
+<%--                            <a class="J_menuItem" href="home.jsp" data-index="0">首页</a>--%>
+<%--                        </li>--%>
+<%--                        <li>--%>
+<%--                            <a class="J_menuItem" href="/sys/userServlet?action=list">用户管理</a>--%>
+<%--                        </li>--%>
+<%--                        <li>--%>
+<%--                            <a class="J_menuItem" href="/sys/roleServlet?action=list">角色管理</a>--%>
+<%--                        </li>--%>
+<%--                        <li>--%>
+<%--                            <a class="J_menuItem" href="/sys/menuServlet?action=list">菜单管理</a>--%>
+<%--                        </li>--%>
+<%--                    </ul>--%>
+<%--                </li>--%>
             </ul>
         </div>
     </nav>

@@ -54,4 +54,5 @@ public interface IUserDao {
     public int deleteById(Integer id);
 
     public SysUser findByName(String username);
+
 }

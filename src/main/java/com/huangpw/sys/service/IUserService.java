@@ -25,4 +25,5 @@ public interface IUserService {
    public int deleteById(Integer id);
 
    public SysUser findByName(String username);
+
 }

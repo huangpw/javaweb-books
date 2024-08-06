@@ -59,5 +59,7 @@ public interface IMenuService {
 
     public boolean haveSubMenu(int id);
 
+    public List<SysMenu> findMenuByRoleId(Integer roleId);
+
 //    public boolean checkRoleDispatch(int roleId);
 }
