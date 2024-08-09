@@ -1,5 +1,6 @@
 package com.huangpw.book.servlet;
 
+import com.alibaba.fastjson.JSONArray;
 import com.huangpw.book.bean.Classes;
 import com.huangpw.book.bean.Depart;
 import com.huangpw.book.service.IClassesService;
@@ -9,7 +10,6 @@ import com.huangpw.book.service.impl.DepartServiceImpl;
 import com.huangpw.sys.servlet.BaseServlet;
 import com.huangpw.sys.utils.Constant;
 import com.huangpw.sys.utils.StringUtils;
-
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -89,5 +89,26 @@ public class ClassesServlet extends BaseServlet {
         req.setAttribute(Constant.DEPARTS, departs);
 
         req.getRequestDispatcher("/book/classes/addOrUpdate.jsp").forward(req, resp);
+    }
+
+    /**
+     * 根据院系编号查询班级信息
+     * @param req
+     * @param resp
+     * @throws Exception
+     */
+    public void findByDepartId(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        // 获取院系编号
+        String departId = req.getParameter("departId");
+        Classes cls = new Classes();
+        cls.setDepartId(Integer.parseInt(departId));
+        List<Classes> list = classesService.list(cls);
+        // 把这个集合对象转换为JSON字符串响应给前端
+        String json = JSONArray.toJSONString(list);
+        // 设置字符编码方式
+        resp.setContentType("application/json;charset=utf-8");
+        PrintWriter writer = resp.getWriter();
+        writer.write(json);
+        writer.flush();
     }
 }

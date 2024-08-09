@@ -15,16 +15,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
-    <title>校园图书管理系统 - 用户管理</title>
+    <title>校园图书管理系统 - 图书管理</title>
     <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
     <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
 
     <link rel="shortcut icon" href="favicon.ico"> <link href="/css/bootstrap.min.css?v=3.3.7" rel="stylesheet">
     <link href="/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link href="/css/plugins/iCheck/custom.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
+
     <!-- 百度WebUpload插件 -->
     <link rel="stylesheet" type="text/css" href="/css/plugins/webuploader/webuploader.css">
-<%--    <link rel="stylesheet" type="text/css" href="/css/demo/webuploader-demo.css">--%>
 
     <link href="/css/style.css?v=4.1.0" rel="stylesheet">
 </head>
@@ -35,7 +36,7 @@
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>用户管理</h5>
+                    <h5>图书管理</h5>
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
@@ -55,45 +56,68 @@
                     </div>
                 </div>
                 <div class="ibox-content">
-                    <form class="form-horizontal m-t" id="signupForm" action="/sys/userServlet?action=saveOrUpdate" method="post">
+                    <form class="form-horizontal m-t" id="signupForm" action="/book/bookServlet?action=saveOrUpdate" method="post">
                         <input type="hidden" name="id" value="${requestScope.entity.id}">
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">用户名：</label>
+                            <label class="col-sm-3 control-label">名称：</label>
                             <div class="col-sm-8">
-                                <input id="username" name="username" class="form-control" type="text" aria-required="true" aria-invalid="true" class="error" value="${requestScope.entity.username}">
+                                <input id="name" name="name" class="form-control" type="text" aria-required="true" aria-invalid="true" class="error" value="${requestScope.entity.name}">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">昵称：</label>
+                            <label class="col-sm-3 control-label">作者：</label>
                             <div class="col-sm-8">
-                                <input id="nickname" name="nickname" class="form-control" type="text" aria-required="true" aria-invalid="false" class="valid" value="${requestScope.entity.nickname}">
+                                <input id="author" name="author" class="form-control" type="text" aria-required="true" aria-invalid="false" class="valid" value="${requestScope.entity.author}">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">密码：</label>
+                            <label class="col-sm-3 control-label">出版社：</label>
                             <div class="col-sm-8">
-                                <input id="password" name="password" class="form-control" type="password" value="${requestScope.entity.password}">
+                                <%--<input id="publish" name="publish" class="form-control" type="text" aria-required="true" aria-invalid="false" class="valid" value="${requestScope.entity.notes}">--%>
+                                <select class="form-control m-b" name="publish">
+                                    <option value="人民文学出版社" ${requestScope.entity.publish == '人民文学出版社' ? 'selected' : ''}>人民文学出版社</option>
+                                    <option value="商务印书馆" ${requestScope.entity.publish == '商务印书馆' ? 'selected' : ''}>商务印书馆</option>
+                                    <option value="人民出版社" ${requestScope.entity.publish == '人民出版社' ? 'selected' : ''}>人民出版社</option>
+                                    <option value="中华书局" ${requestScope.entity.publish == '中华书局' ? 'selected' : ''}>中华书局</option>
+                                    <option value="上海译文出版社" ${requestScope.entity.publish == '上海译文出版社' ? 'selected' : ''}>上海译文出版社</option>
+                                    <option value="三联书店" ${requestScope.entity.publish == '三联书店' ? 'selected' : ''}>三联书店</option>
+                                    <option value="机械工业出版社" ${requestScope.entity.publish == '机械工业出版社' ? 'selected' : ''}>机械工业出版社</option>
+                                    <option value="人民邮电出版社" ${requestScope.entity.publish == '人民邮电出版社' ? 'selected' : ''}>人民邮电出版社</option>
+                                    <option value="上海译文出版社" ${requestScope.entity.publish == '上海人民出版社' ? 'selected' : ''}>上海人民出版社</option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">确认密码：</label>
+                            <label class="col-sm-3 control-label">ISBN：</label>
                             <div class="col-sm-8">
-                                <input id="confirm_password" name="confirm_password" class="form-control" type="password" value="${requestScope.entity.password}">
-                                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 请再次输入您的密码</span>
+                                <input id="isbn" name="isbn" class="form-control" type="text" aria-required="true" aria-invalid="false" class="valid" value="${requestScope.entity.isbn}">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">分配角色：</label>
+                            <label class="col-sm-3 control-label">价格：</label>
                             <div class="col-sm-8">
-                                <select class="form-control m-b" name="roleId">
-                                    <c:forEach items="${requestScope.roles}" var="role">
-                                        <option value="${role.id}" ${role.id == requestScope.entity.roleId ? 'selected' : ''}>${role.name}</option>
+                                <input id="price" name="price" class="form-control" type="number" aria-required="true" aria-invalid="false" class="valid" value="${requestScope.entity.price}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">类型：</label>
+                            <div class="col-sm-8">
+                                <select class="form-control m-b" name="typeId">
+                                    <c:forEach items="${requestScope.types}" var="type">
+                                        <option value="${type.id}" ${type.id == requestScope.entity.typeId ? 'selected' : ''}>${type.name}</option>
                                     </c:forEach>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">头像：</label>
+                            <label class="col-sm-3 control-label">描述：</label>
+                            <div class="col-sm-8">
+                                <textarea id="notes" name="notes" class="form-control" aria-required="true" aria-invalid="false" class="valid">${requestScope.entity.notes}</textarea>
+                                <%--<input id="notes" name="notes" class="form-control" type="text" aria-required="true" aria-invalid="false" class="valid" value="${requestScope.entity.notes}">--%>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">图片：</label>
                             <input type="hidden" name="img" id="imgName" value="${requestScope.entity.img}">
                             <div class="col-sm-8">
                                 <!--dom结构部分-->
@@ -108,7 +132,7 @@
                         <div class="form-group">
                             <div class="col-sm-8 col-sm-offset-3">
                                 <button class="btn btn-primary" type="submit">提交</button>
-                                <a class="btn btn-default" href="/sys/userServlet?action=list">取消</a>
+                                <a class="btn btn-default" href="/book/bookServlet?action=list">取消</a>
                             </div>
                         </div>
                     </form>
@@ -134,16 +158,21 @@
 </script>
 <script src="/js/plugins/webuploader/webuploader.min.js"></script>
 
-<%--<script src="/js/demo/webuploader-demo.js"></script>--%>
-
 <!-- jQuery Validation plugin javascript-->
 <script src="/js/plugins/validate/jquery.validate.min.js"></script>
 <script src="/js/plugins/validate/messages_zh.min.js"></script>
 
 <script type="text/javascript" src="/js/demo/form-validate-demo.js"></script>
 
+<!-- iCheck -->
+<script src="/js/plugins/iCheck/icheck.min.js"></script>
 <script>
-
+    $(document).ready(function () {
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+    });
     // 初始化Web Uploader
     var uploader = WebUploader.create({
 
@@ -177,8 +206,6 @@
         //$('#fileList').text(data._raw);
         $('#img').text(data._raw);
     });
-
-
 </script>
 
 </body>

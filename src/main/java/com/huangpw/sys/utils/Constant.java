@@ -26,4 +26,6 @@ public class Constant {
     public  static final String CLASSESLIST = "classesList";
 
     public static final String ROLE_STUDENT = "学生";
+
+    public static final String UPDATE_ENTITY = "entity";
 }

@@ -15,7 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
-    <title>校园图书管理系统 - 学生管理</title>
+    <title>校园图书管理系统 - 借书卡管理</title>
     <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
     <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
 
@@ -38,7 +38,7 @@
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>学生管理</h5>
+                    <h5>借书卡管理</h5>
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
@@ -60,21 +60,28 @@
                 <div class="ibox-content">
                     <div class="row">
                         <div class="col-sm-9 m-b-xs">
-                            <a class="btn btn-success " type="button" href="/book/studentServlet?action=saveOrUpdatePage">
-                                <i class="fa fa-plus"></i>&nbsp;添加
-                            </a>
+                            <c:if test="${sessionScope.loginUser.isAdmin}">
+                                <a class="btn btn-success " type="button"
+                                   href="/book/borrowCardServlet?action=saveOrUpdatePage">
+                                    <i class="fa fa-plus"></i>&nbsp;添加
+                                </a>
+                            </c:if>
                         </div>
                         <div class="col-sm-3">
                             <div class="input-group">
-                                <form action="/book/studentServlet" id="myForm" method="get">
+                                <form action="/book/borrowCardServlet" id="myForm" method="get">
                                     <div class="input-group">
-                                        <input type="text" name="key" value="${requestScope.pageUtils.key}" placeholder="请输入关键词" class="input-sm form-control">
+                                        <input type="text" name="key" value="${requestScope.pageUtils.key}"
+                                               placeholder="请输入关键词" class="input-sm form-control">
                                         <span class="input-group-btn">
-                                            <button type="button" class="btn btn-sm btn-primary" onclick="onSearch()">搜索</button>
+                                            <button type="button" class="btn btn-sm btn-primary"
+                                                    onclick="onSearch()">搜索</button>
                                         </span>
                                         <input type="hidden" name="action" value="list">
-                                        <input type="hidden" id="pageNum" name="pageNum" value="${requestScope.pageUtils.pageNum}">
-                                        <input type="hidden" id="pageSize" name="pageSize" value="${requestScope.pageUtils.pageSize}">
+                                        <input type="hidden" id="pageNum" name="pageNum"
+                                               value="${requestScope.pageUtils.pageNum}">
+                                        <input type="hidden" id="pageSize" name="pageSize"
+                                               value="${requestScope.pageUtils.pageSize}">
                                     </div>
                                 </form>
                             </div>
@@ -87,18 +94,11 @@
 
                                 <th></th>
                                 <th>编号</th>
-                                <th>名称</th>
-                                <th>学号</th>
-                                <th>年龄</th>
-                                <th>性别</th>
-                                <th>邮箱</th>
-                                <th>电话</th>
-                                <th>微信</th>
-                                <th>地址</th>
-                                <th>所属院系</th>
-                                <th>所属班级</th>
-                                <th>日期</th>
-                                <th style="width: 160px">操作</th>
+                                <th>学生姓名</th>
+                                <th>开始时间</th>
+                                <th>过期时间</th>
+                                <th>状态</th>
+                                <th style="width: 200px">操作</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -108,33 +108,35 @@
                                         <input type="checkbox" class="i-checks" name="input[]">
                                     </td>
                                     <td>${entity.id}</td>
-                                    <td>${entity.name}</td>
-                                    <td>${entity.stuno}</td>
-                                    <td>${entity.age}</td>
-                                    <td>${entity.gender}</td>
-                                    <td>${entity.email}</td>
-                                    <td>${entity.talephone}</td>
-                                    <td>${entity.wechat}</td>
-                                    <td>${entity.address}</td>
-                                    <td>${entity.departname}</td>
-                                    <td>${entity.classname}</td>
-                                    <td>${entity.createTime}</td>
+                                    <td>${entity.stuname}</td>
+                                    <td>${entity.starttime}</td>
+                                    <td>${entity.endtime}</td>
                                     <td>
-                                        <a class="btn btn-warning " type="button"
-                                           href="/book/studentServlet?action=saveOrUpdatePage&id=${entity.id}">
-                                            <i class="fa fa-edit"></i>更新
-                                        </a>
-                                        <button class="btn btn-danger " type="button"
-                                                onclick="removeData(${ entity.id })">
-                                            <i class="fa fa-remove"></i>&nbsp;删除
-                                        </button>
+                                        <c:if test="${entity.state == 0}">空闲</c:if>
+                                        <c:if test="${entity.state == 1}">使用中</c:if>
+                                        <c:if test="${entity.state == 2}">过期</c:if>
+                                        <c:if test="${entity.state == 3}">下架</c:if>
+                                    </td>
+                                    <td>
+                                        <c:if test="${sessionScope.loginUser.isAdmin}">
+                                            <a class="btn btn-warning " type="button"
+                                               href="/book/borrowCardServlet?action=saveOrUpdatePage&id=${entity.id}">
+                                                <i class="fa fa-edit"></i>更新
+                                            </a>
+                                            <c:if test="${entity.state == 0}">
+                                                <button class="btn btn-danger " type="button"
+                                                        onclick="removeData(${ entity.id })">
+                                                    <i class="fa fa-remove"></i>&nbsp;下架
+                                                </button>
+                                            </c:if>
+                                        </c:if>
                                     </td>
                                 </tr>
                             </c:forEach>
                             </tbody>
                         </table>
                     </div>
-                    <%@include file="/common/commonPage.jsp"%>
+                    <%@include file="/common/commonPage.jsp" %>
                 </div>
             </div>
         </div>
@@ -174,17 +176,17 @@
     // 删除
     function removeData(id) {
         swal({
-            title: "您确定要删除这条信息吗",
-            text: "删除后将无法恢复，请谨慎操作！",
+            title: "您确定要下架这条借书卡吗",
+            text: "下架后将无法恢复，请谨慎操作！",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
-            confirmButtonText: "删除",
+            confirmButtonText: "下架",
             cancelButtonText: "取消",
             closeOnConfirm: false
         }, function () {
-            $.get("/book/studentServlet?action=remove&id=" + id, function (msg) {
-                window.location.href = "/book/studentServlet?action=list"
+            $.get("/book/borrowCardServlet?action=remove&id=" + id, function (msg) {
+                window.location.href = "/book/borrowCardServlet?action=list"
             })
         });
     }
@@ -196,9 +198,6 @@
     }
 
 </script>
-
-<script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
-<!--统计代码，可删除-->
 
 </body>
 

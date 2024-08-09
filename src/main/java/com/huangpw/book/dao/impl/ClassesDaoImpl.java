@@ -18,7 +18,12 @@ public class ClassesDaoImpl implements IClassesDao {
     @Override
     public List<Classes> list(Classes classes) {
         QueryRunner queryRunner = MyDbUtils.getQueryRunner();
-        String sql = "select * from t_classes";
+        String sql = "select * from t_classes where 1 = 1 ";
+        if(classes != null) {
+            if(classes.getDepartId() != null && classes.getDepartId() > 0) {
+                sql += " and depart_id = " + classes.getDepartId();
+            }
+        }
         try {
             List<Classes> list = queryRunner.query(sql, new ResultSetHandler<List<Classes>>() {
                 @Override

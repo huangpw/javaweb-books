@@ -59,10 +59,9 @@ public class StudentServlet extends BaseServlet {
         String talephone = req.getParameter("talephone");
         String address = req.getParameter("address");
         String wechat = req.getParameter("wechat");
-        String classId = req.getParameter("class_id");
+        String classId = req.getParameter("classId");
 
         Student student = new Student();
-        student.setAccount(Integer.valueOf(account));
         student.setStuno(stuno);
         student.setName(name);
         student.setAge(Integer.parseInt(age));
@@ -71,6 +70,9 @@ public class StudentServlet extends BaseServlet {
         student.setTalephone(talephone);
         student.setAddress(address);
         student.setWechat(wechat);
+        if(!StringUtils.isEmpty(account)) {
+            student.setAccount(Integer.valueOf(account));
+        }
         if (!StringUtils.isEmpty(classId)) {
             // 班级
             student.setClassId(Integer.parseInt(classId));
@@ -96,7 +98,8 @@ public class StudentServlet extends BaseServlet {
             SysUser user = new SysUser();
             user.setUsername(student.getName());
             user.setNickname(student.getName());
-            user.setPassword("123456"); // 默认密码
+            // 默认密码
+            user.setPassword("123456");
             // 创建的学生，需要指定默认的角色为学生
             SysRole role = new SysRole();
             role.setName(Constant.ROLE_STUDENT);
@@ -121,11 +124,11 @@ public class StudentServlet extends BaseServlet {
     @Override
     public void remove(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         String id = req.getParameter("id");
-        studentService.deleteById(Integer.parseInt(id));
         Student student = studentService.findById(Integer.parseInt(id));
         if(student.getAccount() != null && student.getAccount() > 0){
             userService.deleteById(student.getAccount());
         }
+        studentService.deleteById(Integer.parseInt(id));
         PrintWriter writer = resp.getWriter();
         writer.write("ok");
         writer.flush();
@@ -147,9 +150,6 @@ public class StudentServlet extends BaseServlet {
         // 需要分配院系，所以此处需要查询出所有的院系信息
         List<Depart> departs = departService.list(null);
         req.setAttribute(Constant.DEPARTS, departs);
-        // 需要分配班级，所以此处需要查询出所有的班级信息
-        List<Classes> classesList = classesService.list(null);
-        req.setAttribute(Constant.CLASSESLIST, classesList);
 
         req.getRequestDispatcher("/book/student/addOrUpdate.jsp").forward(req, resp);
     }

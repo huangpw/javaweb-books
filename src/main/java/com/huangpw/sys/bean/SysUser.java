@@ -17,4 +17,5 @@ public class SysUser {
     private String rolename;
     private String img;
     private Date createTime;
+    private Boolean isAdmin = false;
 }

@@ -15,7 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
-    <title>校园图书管理系统 - 学生管理</title>
+    <title>校园图书管理系统 - 图书类型管理</title>
     <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
     <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
 
@@ -38,7 +38,7 @@
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>学生管理</h5>
+                    <h5>图书类型管理</h5>
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
@@ -60,13 +60,13 @@
                 <div class="ibox-content">
                     <div class="row">
                         <div class="col-sm-9 m-b-xs">
-                            <a class="btn btn-success " type="button" href="/book/studentServlet?action=saveOrUpdatePage">
+                            <a class="btn btn-success " type="button" href="/book/bookTypeServlet?action=saveOrUpdatePage">
                                 <i class="fa fa-plus"></i>&nbsp;添加
                             </a>
                         </div>
                         <div class="col-sm-3">
                             <div class="input-group">
-                                <form action="/book/studentServlet" id="myForm" method="get">
+                                <form action="/book/bookTypeServlet" id="myForm" method="get">
                                     <div class="input-group">
                                         <input type="text" name="key" value="${requestScope.pageUtils.key}" placeholder="请输入关键词" class="input-sm form-control">
                                         <span class="input-group-btn">
@@ -88,17 +88,9 @@
                                 <th></th>
                                 <th>编号</th>
                                 <th>名称</th>
-                                <th>学号</th>
-                                <th>年龄</th>
-                                <th>性别</th>
-                                <th>邮箱</th>
-                                <th>电话</th>
-                                <th>微信</th>
-                                <th>地址</th>
-                                <th>所属院系</th>
-                                <th>所属班级</th>
+                                <th>描述</th>
                                 <th>日期</th>
-                                <th style="width: 160px">操作</th>
+                                <th style="width: 200px">操作</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -109,19 +101,11 @@
                                     </td>
                                     <td>${entity.id}</td>
                                     <td>${entity.name}</td>
-                                    <td>${entity.stuno}</td>
-                                    <td>${entity.age}</td>
-                                    <td>${entity.gender}</td>
-                                    <td>${entity.email}</td>
-                                    <td>${entity.talephone}</td>
-                                    <td>${entity.wechat}</td>
-                                    <td>${entity.address}</td>
-                                    <td>${entity.departname}</td>
-                                    <td>${entity.classname}</td>
+                                    <td>${entity.notes}</td>
                                     <td>${entity.createTime}</td>
                                     <td>
                                         <a class="btn btn-warning " type="button"
-                                           href="/book/studentServlet?action=saveOrUpdatePage&id=${entity.id}">
+                                           href="/book/bookTypeServlet?action=saveOrUpdatePage&id=${entity.id}">
                                             <i class="fa fa-edit"></i>更新
                                         </a>
                                         <button class="btn btn-danger " type="button"
@@ -183,8 +167,16 @@
             cancelButtonText: "取消",
             closeOnConfirm: false
         }, function () {
-            $.get("/book/studentServlet?action=remove&id=" + id, function (msg) {
-                window.location.href = "/book/studentServlet?action=list"
+            // swal("删除成功！", "您已经永久删除了这条信息。", "success");
+            $.get("/book/bookTypeServlet?action=remove&id=" + id, function (msg) {
+                if(msg === 'ok') {
+                    // 再发起一个查询的操作
+                    window.location.href = "/book/bookTypeServlet?action=list"
+                } else {
+                    // 表示不能被删除
+                    swal("删除失败！", "该角色已经被分配， 不能删除!!!。", "warning");
+                }
+
             })
         });
     }
