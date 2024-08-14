@@ -61,4 +61,6 @@ public interface IBorrowCardService {
      * @return
      */
     public int count(PageUtils pageUtils, SysUser user);
+
+    List<BorrowCard> getCanUseCard(Integer userId);
 }

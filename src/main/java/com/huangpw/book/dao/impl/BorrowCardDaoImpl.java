@@ -36,7 +36,7 @@ public class BorrowCardDaoImpl implements IBorrowCardDao {
         if (!StringUtils.isEmpty(pageUtils.getKey())) {
             sql += " and stuname like '%" + pageUtils.getKey() + "%'";
         }
-        if(user != null && !user.getIsAdmin()) {
+        if (user != null && !user.getIsAdmin()) {
             // 不是管理员
             sql += " and userid =" + user.getId();
         }
@@ -112,7 +112,7 @@ public class BorrowCardDaoImpl implements IBorrowCardDao {
         if (!StringUtils.isEmpty(pageUtils.getKey())) {
             sql += " and stuname like '%" + pageUtils.getKey() + "%'";
         }
-        if(user != null && !user.getIsAdmin()) {
+        if (user != null && !user.getIsAdmin()) {
             // 不是管理员
             sql += " and userid =" + user.getId();
         }
@@ -128,5 +128,19 @@ public class BorrowCardDaoImpl implements IBorrowCardDao {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    @Override
+    public List<BorrowCard> getCanUseCard(Integer userId) {
+        QueryRunner queryRunner = MyDbUtils.getQueryRunner();
+        String sql = "select * from t_borrow_card where userid = ? and state = 0";
+        try {
+            // 保证实体类与数据库的字段编码一致
+            List<BorrowCard> list = queryRunner.query(sql, new BeanListHandler<BorrowCard>(BorrowCard.class), userId);
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

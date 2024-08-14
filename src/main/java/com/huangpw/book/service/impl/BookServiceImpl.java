@@ -22,6 +22,11 @@ public class BookServiceImpl implements IBookService {
     public void listPage(PageUtils pageUtils) {
         // 查询分页的数据
         List<Book> list = bookdao.listPage(pageUtils);
+        for (Book book : list) {
+            if(book.getNotes().length() > 8) {
+                book.setNotes(book.getNotes().substring(0, 8) + "...");
+            }
+        }
         // 查询 满足查询条件的记录数
         int count = bookdao.count(pageUtils);
         // 封装分页的数据

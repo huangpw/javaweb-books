@@ -54,4 +54,9 @@ public class BorrowCardServiceImpl implements IBorrowCardService {
     public int count(PageUtils pageUtils, SysUser user) {
         return borrowCardDao.count(pageUtils, user);
     }
+
+    @Override
+    public List<BorrowCard> getCanUseCard(Integer userId) {
+        return borrowCardDao.getCanUseCard(userId);
+    }
 }

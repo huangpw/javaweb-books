@@ -1,5 +1,7 @@
 package com.huangpw.sys.servlet;
 
+import com.huangpw.sys.bean.SysUser;
+import com.huangpw.sys.utils.Constant;
 import com.huangpw.sys.utils.PageUtils;
 import com.huangpw.sys.utils.StringUtils;
 
@@ -7,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
@@ -58,6 +61,7 @@ public abstract class BaseServlet extends HttpServlet {
         // 声明默认的分页参数
         int pageSize = 10; // 默认每页显示10条
         int pageNum = 1; // 默认第一页
+
         if(!StringUtils.isEmpty(pn)) {
             pageNum = Integer.parseInt(pn);
         }
@@ -69,9 +73,34 @@ public abstract class BaseServlet extends HttpServlet {
         pageUtils.setPageSize(pageSize);
         pageUtils.setKey(key);
 
+        getCurrentLoginUser(req, resp);
+
     };
     public abstract void saveOrUpdate(HttpServletRequest req, HttpServletResponse resp) throws Exception;
     public abstract void remove(HttpServletRequest req, HttpServletResponse resp) throws Exception;
     public abstract void findById(HttpServletRequest req, HttpServletResponse resp) throws Exception;
     public abstract void saveOrUpdatePage(HttpServletRequest req, HttpServletResponse resp) throws Exception;
+
+    /**
+     * 获取用户是否管理员
+     * @return
+     */
+    public SysUser getCurrentLoginUser(HttpServletRequest req, HttpServletResponse resp) {
+        // 获取当前登录的用户信息
+        HttpSession session = req.getSession();
+        Object obj = session.getAttribute(Constant.LOGIN_USER);
+        SysUser loginUser = null; // 当前登录的用户信息
+        if (obj != null) {
+            loginUser = (SysUser) obj;
+            String rolename = loginUser.getRolename();
+            if(rolename.contains("管理员")) {
+                // 当前用户是管理员
+                loginUser.setIsAdmin(true);
+            } else {
+                // 当前用户是普通用户
+                loginUser.setIsAdmin(false);
+            }
+        }
+        return loginUser;
+    }
 }

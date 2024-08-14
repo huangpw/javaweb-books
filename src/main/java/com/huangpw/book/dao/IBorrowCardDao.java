@@ -54,4 +54,6 @@ public interface IBorrowCardDao {
      * @return
      */
     public int count(PageUtils pageUtils, SysUser user);
+
+    public List<BorrowCard> getCanUseCard(Integer userId);
 }
