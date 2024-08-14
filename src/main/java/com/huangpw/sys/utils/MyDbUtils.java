@@ -15,9 +15,9 @@ public class MyDbUtils {
         // 完成数据源的初始化操作
         dataSource = new MysqlDataSource();
         // 注意默认安装的数据的端口是 3306 这块需要结构自己数据库的情况调整
-        dataSource.setURL("jdbc:mysql://8.140.200.150:3306/javaweb_books?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC");
+        dataSource.setURL("jdbc:mysql://localhost:3306/javaweb_books?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC");
         dataSource.setUser("root"); // 数据库的用户名
-        dataSource.setPassword("mysql_HtsefT"); // 数据库的密码
+        dataSource.setPassword("123456"); // 数据库的密码
     }
 
     public static QueryRunner getQueryRunner(){
